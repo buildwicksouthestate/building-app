@@ -80,11 +80,11 @@
       <div class="grid grid-cols-2 gap-2">
         <div>
           <p class="text-xs text-gray-400">Total Collected</p>
-          <p id="totalCollected" class="text-lg font-bold text-emerald-400">$0</p>
+          <p id="totalCollected" class="text-lg font-bold text-emerald-400">₹0</p>
         </div>
         <div>
           <p class="text-xs text-gray-400">Total Spent</p>
-          <p id="totalSpent" class="text-lg font-bold text-rose-400">$0</p>
+          <p id="totalSpent" class="text-lg font-bold text-rose-400">₹0</p>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
 
       <div class="flex justify-between items-center">
         <span class="text-sm font-medium">Net Surplus / Deficit:</span>
-        <span id="netBalance" class="text-xl font-black text-emerald-400">$0</span>
+        <span id="netBalance" class="text-xl font-black text-emerald-400">₹0</span>
       </div>
     </div>
 
@@ -198,11 +198,11 @@
         
         const data = await res.json();
         
-        document.getElementById("totalCollected").innerText = "$" + data.collected;
-        document.getElementById("totalSpent").innerText = "$" + data.expenses;
+        document.getElementById("totalCollected").innerText = "₹" + data.collected;
+        document.getElementById("totalSpent").innerText = "₹" + data.expenses;
         
         const balanceEl = document.getElementById("netBalance");
-        balanceEl.innerText = "$" + data.surplusDeficit;
+        balanceEl.innerText = "₹" + data.surplusDeficit;
         balanceEl.className = data.surplusDeficit >= 0 ? "text-xl font-black text-emerald-400" : "text-xl font-black text-rose-500";
 
         let html = "";
@@ -214,7 +214,7 @@
                   <p class="font-bold text-gray-300">${item.category}</p>
                   <p class="text-gray-500">${item.description} (Paid by: ${item.paidBy})</p>
                 </div>
-                <span class="font-bold text-rose-400">-$${item.amount}</span>
+                <span class="font-bold text-rose-400">-₹${item.amount}</span>
               </div>`;
           });
         }
