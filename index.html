@@ -107,115 +107,115 @@
   </div>
 
   <script>
-    // Updated Google Apps Script Executable URL
-    const API_URL = "https://script.google.com/macros/s/AKfycbxG7BIVk0EbLUD8rv8tnu0ucGVVBXzWj22RyZh7o5YtenAnb45qQd501TUrfqj4vTJG6w/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbxG7BIVk0EbLUD8rv8tnu0ucGVVBXzWj22RyZh7o5YtenAnb45qQd501TUrfqj4vTJG6w/exec";
 
-    // Switch between Login and Registration views
-    function toggleAuthView(view) {
-      const loginSec = document.getElementById("loginSection");
-      const regSec = document.getElementById("registerSection");
+  function toggleAuthView(view) {
+    const loginSec = document.getElementById("loginSection");
+    const regSec = document.getElementById("registerSection");
 
-      if (view === 'register') {
-        loginSec.classList.add("hidden");
-        regSec.classList.remove("hidden");
-      } else {
-        regSec.classList.add("hidden");
-        loginSec.classList.remove("hidden");
-      }
-    }
-
-    async function loginUser() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-
-  if (!email || !password) {
-    alert("Please enter both email and password.");
-    return;
-  }
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8", // Prevents CORS preflight block
-      },
-      body: JSON.stringify({ action: "login", email: email, password: password })
-    });
-    const result = await res.json();
-
-    if (result.status === "success") {
-      document.getElementById("userInfo").innerText = `${result.user.fullName} (Unit ${result.user.unitNo})`;
-      document.getElementById("userInfo").className = "text-xs bg-emerald-700 text-white px-2 py-1 rounded font-bold";
-      
-      document.getElementById("loginSection").classList.add("hidden");
-      alert("Login successful!");
-      loadDashboard();
+    if (view === 'register') {
+      loginSec.classList.add("hidden");
+      regSec.classList.remove("hidden");
     } else {
-      alert(result.message || "Invalid email or password.");
+      regSec.classList.add("hidden");
+      loginSec.classList.remove("hidden");
     }
-  } catch (err) {
-    console.error("Login Error:", err);
-    alert("Unable to connect to backend service. Check console for details.");
   }
-}
-    async function registerUser() {
-      const payload = {
-        action: "register",
-        fullName: document.getElementById("fullName").value,
-        email: document.getElementById("email").value,
-        mobile: document.getElementById("mobile").value,
-        floorNo: document.getElementById("floorNo").value,
-        unitNo: document.getElementById("unitNo").value,
-        password: document.getElementById("password").value
-      };
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        alert(result.message);
-        
-        if (result.status === "success" || result.success) {
-          toggleAuthView('login');
-        }
-      } catch (err) {
-        console.error("Registration Error:", err);
-      }
+  async function loginUser() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
     }
 
-    async function loadDashboard() {
-      try {
-        const res = await fetch(`${API_URL}?action=getDashboardData&monthYear=2026-09`);
-        const data = await res.json();
-        
-        document.getElementById("totalCollected").innerText = "$" + data.collected;
-        document.getElementById("totalSpent").innerText = "$" + data.expenses;
-        
-        const balanceEl = document.getElementById("netBalance");
-        balanceEl.innerText = "$" + data.surplusDeficit;
-        balanceEl.className = data.surplusDeficit >= 0 ? "text-xl font-black text-emerald-400" : "text-xl font-black text-rose-500";
+    try {
+      // Content-Type set to text/plain to prevent CORS preflight blocking
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "login", email: email, password: password })
+      });
+      const result = await res.json();
 
-        let html = "";
-        data.expenseList.forEach(item => {
-          html += `
-            <div class="flex justify-between items-center bg-gray-900 p-2 rounded border border-gray-800">
-              <div>
-                <p class="font-bold text-gray-300">${item.category}</p>
-                <p class="text-gray-500">${item.description} (Paid by: ${item.paidBy})</p>
-              </div>
-              <span class="font-bold text-rose-400">-$${item.amount}</span>
-            </div>`;
-        });
-        document.getElementById("expenseList").innerHTML = html || "<p class='text-gray-500'>No expenses logged this month.</p>";
-      } catch (err) {
-        console.error("API Fetch Error:", err);
+      if (result.status === "success") {
+        document.getElementById("userInfo").innerText = `${result.user.fullName} (Unit ${result.user.unitNo})`;
+        document.getElementById("userInfo").className = "text-xs bg-emerald-700 text-white px-2 py-1 rounded font-bold";
+        
+        document.getElementById("loginSection").classList.add("hidden");
+        alert("Login successful!");
+        loadDashboard();
+      } else {
+        alert(result.message || "Invalid email or password.");
       }
+    } catch (err) {
+      console.error("Login Error Details:", err);
+      alert("Unable to connect to backend service. Check console for details.");
     }
+  }
 
-    // Load initial public dashboard data
-    loadDashboard();
-  </script>
+  async function registerUser() {
+    const payload = {
+      action: "register",
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      mobile: document.getElementById("mobile").value,
+      floorNo: document.getElementById("floorNo").value,
+      unitNo: document.getElementById("unitNo").value,
+      password: document.getElementById("password").value
+    };
+
+    try {
+      // Content-Type set to text/plain to prevent CORS preflight blocking
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      alert(result.message);
+      
+      if (result.status === "success" || result.success) {
+        toggleAuthView('login');
+      }
+    } catch (err) {
+      console.error("Registration Error Details:", err);
+      alert("Registration failed. Check console.");
+    }
+  }
+
+  async function loadDashboard() {
+    try {
+      const res = await fetch(`${API_URL}?action=getDashboardData&monthYear=2026-09`);
+      const data = await res.json();
+      
+      document.getElementById("totalCollected").innerText = "$" + data.collected;
+      document.getElementById("totalSpent").innerText = "$" + data.expenses;
+      
+      const balanceEl = document.getElementById("netBalance");
+      balanceEl.innerText = "$" + data.surplusDeficit;
+      balanceEl.className = data.surplusDeficit >= 0 ? "text-xl font-black text-emerald-400" : "text-xl font-black text-rose-500";
+
+      let html = "";
+      data.expenseList.forEach(item => {
+        html += `
+          <div class="flex justify-between items-center bg-gray-900 p-2 rounded border border-gray-800">
+            <div>
+              <p class="font-bold text-gray-300">${item.category}</p>
+              <p class="text-gray-500">${item.description} (Paid by: ${item.paidBy})</p>
+            </div>
+            <span class="font-bold text-rose-400">-$${item.amount}</span>
+          </div>`;
+      });
+      document.getElementById("expenseList").innerHTML = html || "<p class='text-gray-500'>No expenses logged this month.</p>";
+    } catch (err) {
+      console.error("API Fetch Error:", err);
+    }
+  }
+
+  loadDashboard();
+</script>
 </body>
 </html>
