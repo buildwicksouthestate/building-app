@@ -62,23 +62,24 @@
 
   <script>
     // Replace with your deployed Apps Script Web App URL
-    const API_URL = "https://script.google.com/macros/s/AKfycbzXbX1oJ5kryab0r1DRkNrgLWyuJxEXJsHND-NCR6oBeHUoFelxgG94GdZdsD-K5V-X5Q/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyAliCsNW_DA0tXmG-59LbrD-Zsp03i-oipBxrKpvPqbYx9lkjz571cTGNwU5i90etWnA/exec";
 
     function toggleAuthView(view) {
       document.getElementById("loginSection").classList.toggle("hidden", view === "register");
       document.getElementById("registerSection").classList.toggle("hidden", view === "login");
     }
 
-    async function postData(data) {
-      const params = new URLSearchParams();
-      for (const key in data) params.append(key, data[key]);
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: params,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" }
-      });
-      return response.json();
-    }
+async function postData(data) {
+  const params = new URLSearchParams();
+  for (const key in data) params.append(key, data[key]);
+  const response = await fetch(API_URL, {
+    method: "POST",
+    body: params,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  });
+  return response.json();
+}
+
 
     async function loginUser() {
       const email = document.getElementById("loginEmail").value;
