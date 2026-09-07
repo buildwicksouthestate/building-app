@@ -8,6 +8,7 @@
 </head>
 <body class="bg-gray-900 text-white font-sans pb-10">
 
+  <!-- Header -->
   <nav class="bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center">
     <h1 class="text-xl font-bold text-indigo-400">Building Manager</h1>
     <span id="userInfo" class="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">Not Logged In</span>
@@ -15,33 +16,61 @@
 
   <div class="max-w-md mx-auto p-4 space-y-6">
 
-    <div id="loginSection" class="bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-3">
-      <h2 class="text-md font-bold text-gray-200">Resident Login</h2>
-      <input id="loginEmail" type="email" placeholder="Email Address" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700 focus:outline-none focus:border-indigo-500">
-      <input id="loginPassword" type="password" placeholder="Password" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700 focus:outline-none focus:border-indigo-500">
-      <button onclick="loginUser()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded text-sm font-bold transition">Login</button>
-    </div>
-
-    <div id="registerSection" class="bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-3">
-      <h2 class="text-md font-bold text-gray-200">Resident Registration</h2>
-      <input id="fullName" type="text" placeholder="Full Name" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
-      <input id="email" type="email" placeholder="Email Address" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
-      <input id="mobile" type="tel" placeholder="Mobile Number" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
-      <div class="flex gap-2">
-        <select id="floorNo" class="w-1/2 p-2 text-sm bg-gray-900 rounded border border-gray-700">
-          <option value="">Floor</option>
-          <option value="1">Floor 1</option>
-          <option value="2">Floor 2</option>
-          <option value="3">Floor 3</option>
-          <option value="4">Floor 4</option>
-          <option value="5">Floor 5</option>
-        </select>
-        <input id="unitNo" type="text" placeholder="Unit (e.g. 302)" class="w-1/2 p-2 text-sm bg-gray-900 rounded border border-gray-700">
+    <!-- 1. Login View (Shown by default) -->
+    <div id="loginSection" class="bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-4">
+      <div>
+        <h2 class="text-lg font-bold text-gray-100">Resident Login</h2>
+        <p class="text-xs text-gray-400">Enter your credentials to access your portal.</p>
       </div>
-      <input id="password" type="password" placeholder="Password" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
-      <button onclick="registerUser()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded text-sm font-bold transition">Register Account</button>
+      
+      <div class="space-y-3">
+        <input id="loginEmail" type="email" placeholder="Email Address" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700 focus:outline-none focus:border-indigo-500">
+        <input id="loginPassword" type="password" placeholder="Password" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700 focus:outline-none focus:border-indigo-500">
+        <button onclick="loginUser()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded text-sm font-bold transition">Login</button>
+      </div>
+
+      <div class="text-center pt-2 border-t border-gray-700">
+        <p class="text-xs text-gray-400">Don't have an account?</p>
+        <button onclick="toggleAuthView('register')" class="mt-1 text-xs text-indigo-400 hover:underline font-semibold">Register New Account</button>
+      </div>
     </div>
 
+    <!-- 2. Registration View (Hidden by default) -->
+    <div id="registerSection" class="hidden bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-lg font-bold text-gray-100">Resident Registration</h2>
+          <p class="text-xs text-gray-400">Create an account for building updates.</p>
+        </div>
+        <button onclick="toggleAuthView('login')" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded transition">← Back to Login</button>
+      </div>
+
+      <div class="space-y-3">
+        <input id="fullName" type="text" placeholder="Full Name" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
+        <input id="email" type="email" placeholder="Email Address" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
+        <input id="mobile" type="tel" placeholder="Mobile Number" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
+        <div class="flex gap-2">
+          <select id="floorNo" class="w-1/2 p-2 text-sm bg-gray-900 rounded border border-gray-700">
+            <option value="">Floor</option>
+            <option value="1">Floor 1</option>
+            <option value="2">Floor 2</option>
+            <option value="3">Floor 3</option>
+            <option value="4">Floor 4</option>
+            <option value="5">Floor 5</option>
+          </select>
+          <input id="unitNo" type="text" placeholder="Unit (e.g. 302)" class="w-1/2 p-2 text-sm bg-gray-900 rounded border border-gray-700">
+        </div>
+        <input id="password" type="password" placeholder="Password" class="w-full p-2 text-sm bg-gray-900 rounded border border-gray-700">
+        <button onclick="registerUser()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded text-sm font-bold transition">Register Account</button>
+      </div>
+
+      <div class="text-center pt-2 border-t border-gray-700">
+        <p class="text-xs text-gray-400">Already registered?</p>
+        <button onclick="toggleAuthView('login')" class="mt-1 text-xs text-indigo-400 hover:underline font-semibold">Go to Login</button>
+      </div>
+    </div>
+
+    <!-- Financial Summary Card -->
     <div class="bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-5 shadow-2xl space-y-4">
       <div class="flex justify-between items-center">
         <span class="text-xs text-gray-400 uppercase tracking-widest">Monthly Overview</span>
@@ -67,6 +96,7 @@
       </div>
     </div>
 
+    <!-- Expense Log Section -->
     <div class="bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-3">
       <h2 class="text-md font-bold text-gray-200">Recent Spends & Invoices</h2>
       <div id="expenseList" class="space-y-2 text-xs">
@@ -79,6 +109,20 @@
   <script>
     // Paste your Google Apps Script Web App URL here
     const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+    // Switch between Login and Registration views
+    function toggleAuthView(view) {
+      const loginSec = document.getElementById("loginSection");
+      const regSec = document.getElementById("registerSection");
+
+      if (view === 'register') {
+        loginSec.classList.add("hidden");
+        regSec.classList.remove("hidden");
+      } else {
+        regSec.classList.add("hidden");
+        loginSec.classList.remove("hidden");
+      }
+    }
 
     async function loginUser() {
       const email = document.getElementById("loginEmail").value;
@@ -99,6 +143,9 @@
         if (result.status === "success") {
           document.getElementById("userInfo").innerText = `${result.user.fullName} (Unit ${result.user.unitNo})`;
           document.getElementById("userInfo").className = "text-xs bg-emerald-700 text-white px-2 py-1 rounded font-bold";
+          
+          // Hide login/registration form upon successful login
+          document.getElementById("loginSection").classList.add("hidden");
           alert("Login successful!");
           loadDashboard();
         } else {
@@ -106,7 +153,7 @@
         }
       } catch (err) {
         console.error("Login Error:", err);
-        alert("Unable to connect to the backend server.");
+        alert("Unable to connect to backend service.");
       }
     }
 
@@ -128,6 +175,10 @@
         });
         const result = await res.json();
         alert(result.message);
+        
+        if (result.status === "success" || result.success) {
+          toggleAuthView('login'); // Redirect to login view after successful registration
+        }
       } catch (err) {
         console.error("Registration Error:", err);
       }
@@ -162,7 +213,7 @@
       }
     }
 
-    // Load public dashboard initial data
+    // Load initial public dashboard data
     loadDashboard();
   </script>
 </body>
