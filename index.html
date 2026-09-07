@@ -77,35 +77,54 @@
     // Paste your Google Apps Script Web App URL here
     const API_URL = "https://script.google.com/macros/s/AKfycbxG7BIVk0EbLUD8rv8tnu0ucGVVBXzWj22RyZh7o5YtenAnb45qQd501TUrfqj4vTJG6w/exec";
 
-    async function loadDashboard() {
-      try {
-        const res = await fetch(`${API_URL}?action=getDashboardData&monthYear=2026-09`);
-        const data = await res.json();
-        
-        document.getElementById("totalCollected").innerText = "$" + data.collected;
-        document.getElementById("totalSpent").innerText = "$" + data.expenses;
-        
-        const balanceEl = document.getElementById("netBalance");
-        balanceEl.innerText = "$" + data.surplusDeficit;
-        balanceEl.className = data.surplusDeficit >= 0 ? "text-xl font-black text-emerald-400" : "text-xl font-black text-rose-500";
+    async function loginUser() {
+  const payload = {
+    action: "login",
+    email: document.getElementById("loginEmail").value,
+    password: document.getElementById("loginPassword").value
+  };
 
-        let html = "";
-        data.expenseList.forEach(item => {
-          html += `
-            <div class="flex justify-between items-center bg-gray-900 p-2 rounded border border-gray-800">
-              <div>
-                <p class="font-bold text-gray-300">${item.category}</p>
-                <p class="text-gray-500">${item.description} (Paid by: ${item.paidBy})</p>
-              </div>
-              <span class="font-bold text-rose-400">-$${item.amount}</span>
-            </div>`;
-        });
-        document.getElementById("expenseList").innerHTML = html || "<p class='text-gray-500'>No expenses logged this month.</p>";
-      } catch (err) {
-        console.error("API Fetch Error:", err);
-      }
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    
+    if (result.status === "success") {
+      document.getElementById("userInfo").innerText = result.user.fullName + " (" + result.user.unitNo + ")";
+      alert("Login successful!");
+      loadDashboard();
+    } else {
+      alert(result.message || "Login failed.");
     }
+  } catch (err) {
+    console.error("Login Error:", err);
+    alert("Could not complete login.");
+  }
+}
 
+async function registerUser() {
+  const payload = {
+    action: "register",
+    fullName: document.getElementById("fullName").value,
+    email: document.getElementById("email").value,
+    floorNo: document.getElementById("floorNo").value,
+    unitNo: document.getElementById("unitNo").value,
+    password: document.getElementById("password").value
+  };
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    alert(result.message);
+  } catch (err) {
+    console.error("Registration Error:", err);
+  }
+}
     async function registerUser() {
       const payload = {
         action: "register",
