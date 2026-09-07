@@ -61,57 +61,24 @@
   </div>
 
   <script>
-    // Replace with your deployed Apps Script Web App URL
+    // ✅ Define your backend URL here
     const API_URL = "https://script.google.com/macros/s/AKfycbyAliCsNW_DA0tXmG-59LbrD-Zsp03i-oipBxrKpvPqbYx9lkjz571cTGNwU5i90etWnA/exec";
 
     function toggleAuthView(view) {
       document.getElementById("loginSection").classList.toggle("hidden", view === "register");
       document.getElementById("registerSection").classList.toggle("hidden", view === "login");
     }
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxYOUR_DEPLOYMENT_ID/exec";
 
-  async function postData(data) {
-    const params = new URLSearchParams();
-    for (const key in data) params.append(key, data[key]);
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: params,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" }
-    });
-    return response.json();
-  }
-
-  // ... rest of your functions
-</script>
-
-async function postData(data) {
-  const params = new URLSearchParams();
-  for (const key in data) params.append(key, data[key]);
-  const response = await fetch(API_URL, {
-    method: "POST",
-    body: params,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
-  });
-  return response.json();
-}
-
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxYOUR_DEPLOYMENT_ID/exec";
-
-  async function postData(data) {
-    const params = new URLSearchParams();
-    for (const key in data) params.append(key, data[key]);
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: params,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" }
-    });
-    return response.json();
-  }
-
-  // ... rest of your functions
-</script>
+    async function postData(data) {
+      const params = new URLSearchParams();
+      for (const key in data) params.append(key, data[key]);
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: params,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      });
+      return response.json();
+    }
 
     async function loginUser() {
       const email = document.getElementById("loginEmail").value;
@@ -131,22 +98,6 @@ async function postData(data) {
         alert("Unable to connect to backend service.");
       }
     }
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxYOUR_DEPLOYMENT_ID/exec";
-
-  async function postData(data) {
-    const params = new URLSearchParams();
-    for (const key in data) params.append(key, data[key]);
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: params,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" }
-    });
-    return response.json();
-  }
-
-  // ... rest of your functions
-</script>
 
     async function registerUser() {
       const payload = {
@@ -167,22 +118,6 @@ async function postData(data) {
         alert("Registration failed.");
       }
     }
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxYOUR_DEPLOYMENT_ID/exec";
-
-  async function postData(data) {
-    const params = new URLSearchParams();
-    for (const key in data) params.append(key, data[key]);
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: params,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" }
-    });
-    return response.json();
-  }
-
-  // ... rest of your functions
-</script>
 
     async function loadDashboard() {
       try {
