@@ -16,7 +16,7 @@
 
   <div class="max-w-md mx-auto p-4 space-y-6">
 
-    <!-- 1. Login View (Shown by default) -->
+    <!-- 1. Login View -->
     <div id="loginSection" class="bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-4">
       <div>
         <h2 class="text-lg font-bold text-gray-100">Resident Login</h2>
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <!-- 2. Registration View (Hidden by default) -->
+    <!-- 2. Registration View -->
     <div id="registerSection" class="hidden bg-gray-800 p-5 rounded-2xl border border-gray-700 space-y-4">
       <div class="flex justify-between items-center">
         <div>
@@ -122,6 +122,19 @@
       }
     }
 
+    // Helper function using URLSearchParams to avoid CORS preflight blocks
+    async function postData(data) {
+      const params = new URLSearchParams();
+      for (const key in data) {
+        params.append(key, data[key]);
+      }
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: params
+      });
+      return response.json();
+    }
+
     async function loginUser() {
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
@@ -132,14 +145,7 @@
       }
 
       try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          mode: "cors",
-          redirect: "follow",
-          body: JSON.stringify({ action: "login", email: email, password: password })
-        });
-        
-        const result = await res.json();
+        const result = await postData({ action: "login", email: email, password: password });
 
         if (result.status === "success") {
           document.getElementById("userInfo").innerText = `${result.user.fullName} (Unit ${result.user.unitNo})`;
@@ -169,14 +175,7 @@
       };
 
       try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          mode: "cors",
-          redirect: "follow",
-          body: JSON.stringify(payload)
-        });
-        
-        const result = await res.json();
+        const result = await postData(payload);
         alert(result.message);
         
         if (result.status === "success" || result.success) {
@@ -190,31 +189,30 @@
 
     async function loadDashboard() {
       try {
-        const res = await fetch(`${API_URL}?action=getDashboardData&monthYear=2026-09`, {
-          method: "GET",
-          mode: "cors",
-          redirect: "follow"
-        });
-        
+        const res = await fetch(`${API_URL}?action=getDashboardData&monthYear=2026-09`);
         const data = await res.json();
         
-        document.getElementById("totalCollected").innerText = "₹" + data.collected;
-        document.getElementById("totalSpent").innerText = "₹" + data.expenses;
+        const cleanAmount = (val) => String(val || 0).replace(/\$/g, '').trim();
+
+        document.getElementById("totalCollected").innerText = "₹" + cleanAmount(data.collected);
+        document.getElementById("totalSpent").innerText = "₹" + cleanAmount(data.expenses);
         
+        const netBalance = cleanAmount(data.surplusDeficit);
         const balanceEl = document.getElementById("netBalance");
-        balanceEl.innerText = "₹" + data.surplusDeficit;
-        balanceEl.className = data.surplusDeficit >= 0 ? "text-xl font-black text-emerald-400" : "text-xl font-black text-rose-500";
+        balanceEl.innerText = "₹" + netBalance;
+        balanceEl.className = Number(netBalance) >= 0 ? "text-xl font-black text-emerald-400" : "text-xl font-black text-rose-500";
 
         let html = "";
         if (data.expenseList && data.expenseList.length > 0) {
           data.expenseList.forEach(item => {
+            const itemAmt = cleanAmount(item.amount);
             html += `
               <div class="flex justify-between items-center bg-gray-900 p-2 rounded border border-gray-800">
                 <div>
                   <p class="font-bold text-gray-300">${item.category}</p>
                   <p class="text-gray-500">${item.description} (Paid by: ${item.paidBy})</p>
                 </div>
-                <span class="font-bold text-rose-400">-₹${item.amount}</span>
+                <span class="font-bold text-rose-400">-₹${itemAmt}</span>
               </div>`;
           });
         }
